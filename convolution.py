@@ -15,7 +15,7 @@ train_transforms=torchvision.transforms.Compose([
     torchvision.transforms.RandomHorizontalFlip(),
     torchvision.transforms.RandomCrop(224,padding=4),
     torchvision.transforms.ToTensor(),
-    torchvision.transforms.Normalize([0.5,0.5,0.5],
+    torchvision.transforms.Normalize([0.5,0.5,0.5],   
                                      [0.5,0.5,0.5])
 ])
 
@@ -83,7 +83,6 @@ model=model.to(DEVICE)
 #optimizer and loss
 criterion=torch.nn.CrossEntropyLoss()
 optimizer=torch.optim.Adam(model.parameters(),lr=1e-3)
-
 #train
 best_val_acc=0
 for epoch in range(Epochs):
