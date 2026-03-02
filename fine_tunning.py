@@ -1,0 +1,251 @@
+import torch 
+import torchvision
+
+#setting
+Epochs=5
+Batch=32
+Architecture='resnet50'
+num_classes=2
+DEVICE=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+train_accs,train_losses=[],[]
+val_accs,val_losses=[],[]
+
+
+#data loading
+train_transforms=torchvision.transforms.Compose([
+    torchvision.transforms.Resize((224,224)),
+    torchvision.transforms.RandomHorizontalFlip(),
+    torchvision.transforms.RandomCrop(224,padding=4),
+    torchvision.transforms.ToTensor(),
+    torchvision.transforms.Normalize([0.485,0.456,0.406],
+                                     [0.229,0.224,0.225])
+
+])
+
+val_transforms=torchvision.transforms.Compose([
+    torchvision.transforms.Resize((224,224)),
+    torchvision.transforms.ToTensor(),
+    torchvision.transforms.Normalize([0.485,0.456,0.406],
+                                     [0.229,0.224,0.225])
+])
+
+train_datasets=torchvision.datasets.ImageFolder(root='cat-and-dog/training_set',transform=train_transforms)
+val_datasets=torchvision.datasets.ImageFolder(root='cat-and-dog/test_set',transform=val_transforms)
+
+train_loader=torch.utils.data.DataLoader(dataset=train_datasets,shuffle=True,batch_size=Batch)
+val_loader=torch.utils.data.DataLoader(dataset=val_datasets,shuffle=False,batch_size=Batch)
+
+
+#build model
+def buil_model(Architecture,num_classes):
+
+    #Resnet50
+    if Architecture=='resnet50':
+        model=torchvision.models.resnet50(weights='IMAGENET1K_V2')
+
+        for param in model.parameters():
+            param.requires_grad=False
+        
+        for param in model.layer4.parameters():
+            param.requires_grad=True
+        
+        in_features=model.fc.in_features
+        model.fc=torch.nn.Sequential(
+            torch.nn.Linear(in_features,512),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.4),
+            torch.nn.Linear(512,num_classes)
+        )
+
+    #vgg16
+    elif Architecture=='vgg16':
+        model=torchvision.models.vgg16(weights='IMAGENET1K_V1')
+
+        for param in model.features.parameters():
+            param.requires_grad=False
+
+        for param in list(model.features.children())[:-4]:
+            param.requires_grad=True
+        
+        in_features=model.classifier[6].in_features
+        model.classifier[6]=torch.nn.Sequential(
+            torch.nn.Linear(in_features,256),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.4),
+            torch.nn.Linear(256,num_classes)
+        )
+
+
+    #mobilenet
+    elif Architecture=='mobilenet_v2':
+        model=torchvision.models.mobilenet_v2(weights='IMAGENET1K_V1')
+
+        for param in model.features.parameters():
+            param.requires_grad=False
+        
+        for param in list(model.features.children())[:-3]:
+            param.requires_grad=True
+        
+        in_features=model.classifier[4].in_features
+        model.classifier[4]=torch.nn.Sequential(
+            torch.nn.Linear(in_features,256),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.4),
+            torch.nn.Linear(256,num_classes)
+        )
+
+    else:
+        raise ValueError(f'Invalid Architecture:{Architecture}')
+    
+    return model
+    
+
+model=buil_model(Architecture,num_classes)
+model=model.to(DEVICE)
+
+#loss and optimizer
+criterion=torch.nn.CrossEntropyLoss()
+
+optimizer=torch.optim.Adam(
+    filter(lambda p: p.requires_grad,model.parameters()),lr=1e-3
+
+)
+
+
+#train 
+best_val_acc=0
+for epoch in range(Epochs):
+    model.train()
+    running_loss,total,correct=0.0,0,0
+
+    for images,labels in train_loader:
+        images,labels=images.to(DEVICE),labels.to(DEVICE)
+        optimizer.zero_grad()
+        outputs=model(images)
+        loss=criterion(outputs,labels)
+        loss.backward()
+        optimizer.step()
+
+        running_loss+=loss.item()
+        predicted=outputs.argmax(1)
+        correct+=(predicted==labels).sum().item()
+        total+=labels.size(0)
+
+    train_acc=(correct*100)/total
+    train_loss=running_loss/len(train_loader)
+
+    model.eval()
+    running_loss,total,correct=0.0,0,0
+
+    with torch.no_grad():
+        for images,labels in val_loader:
+            images,labels=images.to(DEVICE),labels.to(DEVICE)
+            outputs=model(images)
+            loss=criterion(outputs,labels)
+
+            running_loss+=loss.item()
+            predicted=outputs.argmax(1)
+            correct+=(predicted==labels).sum().item()
+            total+=labels.size(0)
+
+    val_acc=(correct*100)/total
+    val_loss=running_loss/len(val_loader)
+
+    if val_acc > best_val_acc:
+        best_val_acc = val_acc
+
+    train_accs.append(train_acc)
+    train_losses.append(train_loss)
+    val_accs.append(val_acc)
+    val_losses.append(val_loss)
+
+    print(f"Epoch {epoch+1}/{Epochs}")
+    print(f"Training Accuracy { train_acc:.2f}")
+    print(f"Val Accuracy { val_acc:.2f}")
+print(f"Best val Accuracy{ best_val_acc:.2f}")
+
+
+#plotting 
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+
+#training cruve
+def training_cruve(train_accs,val_accs,train_losses,val_losses):
+    fig,(ax1,ax2)=plt.subplots(1,2,figsize=(12,4))
+
+    ax1.plot(train_accs,label='Train')
+    ax1.plot(val_accs,label='Val ')
+    ax1.set_title('Accuracy')
+    ax1.set_xlabel("Epoch")
+    ax1.set_ylabel("%")
+    ax1.legend()
+
+    ax2.plot(train_losses,label='Train')
+    ax2.plot(val_losses,label='Val')
+    ax2.set_title("loss")
+    ax2.set_xlabel("Epoch")  
+    ax2.set_ylabel("Loss")    
+    ax2.legend()
+
+    plt.tight_layout()
+    plt.savefig('Fine_training.png')
+    plt.show()
+    print('Saved training cruves')
+
+#confusion matrix
+def plot_confusion_matrix(model,val_loader,class_names):
+    all_preds,all_labels=[],[]
+    model.eval()
+    with torch.no_grad():
+        for images,labels in val_loader:
+            images,labels=images.to(DEVICE),labels.to(DEVICE)
+            outputs=model(images)
+            preds=outputs.argmax(1).cpu().numpy()
+            all_preds.extend(preds)
+            all_labels.extend(labels.cpu().numpy())
+        
+    cm=confusion_matrix(all_preds,all_labels)
+    plt.figure(figsize=(10,8))
+    sns.heatmap(cm,annot=True,fmt='d',cmap='Blues',
+                xticklabels=class_names,
+                yticklabels=class_names)
+    
+    plt.title("Confusion matrix")
+    plt.xlabel("Predicted")
+    plt.ylabel("True")
+    plt.savefig("fineConfusion.png")
+    plt.show()
+    print("Confusion matrix is saved")
+
+
+#sample prediction
+def plot_predicted(model,val_loader,class_names,n=8):
+    model.eval()
+    images,labels=next(iter(val_loader))
+    with torch.no_grad():
+        images=images.to(DEVICE)
+        preds=model(images).argmax(1).cpu().numpy()
+
+        mean=torch.tensor([0.485,0.456,0.406]).view(3,1,1).to(DEVICE)
+        std=torch.tensor([0.229,0.224,0.225]).view(3,1,1).to(DEVICE)
+        images=(images*std+mean).clamp(0,1).cpu()
+  
+        fig,axes=plt.subplots(1,n,figsize=(2*n,3))
+        for i,ax in enumerate(axes):
+            ax.imshow(images[i].permute(1,2,0))
+            color='green' if preds[i]==labels[i] else 'red'
+            ax.set_title(f'P: {class_names[preds[i]]}\n'
+                         f'T: {class_names[labels[i]]}',
+                         color=color,fontsize=8)
+            ax.axis('off')
+        
+        plt.savefig("predicted_fine.png")
+        plt.show()
+        print("Saved figure")
+        
+class_names=train_datasets.classes
+
+training_cruve(train_accs,val_accs,train_losses,val_losses)
+plot_confusion_matrix(model,val_loader,class_names)
+plot_predicted(model,val_loader,class_names)
