@@ -43,13 +43,13 @@ Linear(512→2)
 | Model |  AVG Accuracy |
 |-------|----------|
 | CNN from Scratch | 69.52% |
-| Feature Extraction | 98.61% |
+| Feature Extraction | 98.778% |
 | Fine Tuning | 99.195% |
 
 | Model |  BEST Accuracy |
 |-------|----------|
 | CNN from Scratch | 80.97% |
-| Feature Extraction | 99.21% |
+| Feature Extraction | 99.16% |
 | Fine Tuning | 99.51% |
 
 
@@ -61,7 +61,8 @@ CNN training graph
 <img width="1200" height="400" alt="conv_train" src="https://github.com/user-attachments/assets/3ac52536-0844-4c32-9309-1afe593ad891" />
 
 Feature Extraction
-<img width="1200" height="400" alt="feature_training" src="https://github.com/user-attachments/assets/f0a123e7-8d56-42b2-bd86-98f027496cfd" />
+<img width="1200" height="400" alt="feature_E_training" src="https://github.com/user-attachments/assets/1e567790-39df-48ab-a0f3-572a2cf1abd7" />
+
 
 Fine Tunning
 <img width="1200" height="400" alt="Fine_training" src="https://github.com/user-attachments/assets/28c3289e-6883-4578-8953-a244139bdc90" />
@@ -75,7 +76,8 @@ CNN confusion matrix
 <img width="1200" height="800" alt="convConfusion" src="https://github.com/user-attachments/assets/3628b8db-56eb-4276-9315-2ff79fa9ec45" />
 
 Feature Extraction confusion matrix
-<img width="1000" height="800" alt="featureConfusion" src="https://github.com/user-attachments/assets/3d6a81df-97b9-4308-8126-d48f2e3cf81b" />
+<img width="1000" height="800" alt="featureConfusion" src="https://github.com/user-attachments/assets/16b578da-de80-4720-bd32-a5b027ad391c" />
+
 
 Fine Tunning confusion matrix
 <img width="1000" height="800" alt="fineConfusion" src="https://github.com/user-attachments/assets/9d94eaec-3862-4fc1-aee7-0361133708e5" />
@@ -89,7 +91,9 @@ CNN
 <img width="1600" height="300" alt="cnnpredicted" src="https://github.com/user-attachments/assets/00016de1-15b3-4a25-95e8-f45f22c16459" />
 
 Feature Extraction
-<img width="1600" height="300" alt="predicted_feature" src="https://github.com/user-attachments/assets/1fc28614-bb95-4226-a019-93d544025b49" />
+<img width="1600" height="300" alt="predicted_feature" src="https://github.com/user-attachments/assets/1d227a06-030b-4bc9-a92a-f75425f89fbd" />
+
+
 
 Fine Tunning 
 <img width="1600" height="300" alt="predicted_fine" src="https://github.com/user-attachments/assets/8e546bdc-4062-42cb-865f-01bed3b52f54" />
