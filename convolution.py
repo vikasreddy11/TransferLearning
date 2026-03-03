@@ -91,9 +91,18 @@ class build_CNN(torch.nn.Module):
 model=build_CNN()
 model=model.to(DEVICE)
 
-#optimizer and loss
+#optimizer ,loss and scheduler
 criterion=torch.nn.CrossEntropyLoss()
 optimizer=torch.optim.Adam(model.parameters(),lr=1e-3)
+scheduler=torch.optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer,
+    mode='max',
+    factor=0.5,
+    patience=2,
+    verbose=True
+)
+
+
 #train
 best_val_acc=0
 for epoch in range(Epochs):
@@ -128,8 +137,10 @@ for epoch in range(Epochs):
             total+=labels.size(0)
             running_loss+=loss.item()
 
-        val_acc=(correct*100)/total
-        val_loss=running_loss/len(val_loader)
+    val_acc=(correct*100)/total
+    val_loss=running_loss/len(val_loader)
+    
+    scheduler.step(val_acc)
     
     if val_acc>best_val_acc:
         best_val_acc=val_acc
