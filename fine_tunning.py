@@ -15,6 +15,9 @@ val_accs,val_losses=[],[]
 train_transforms=torchvision.transforms.Compose([
     torchvision.transforms.Resize((224,224)),
     torchvision.transforms.RandomHorizontalFlip(),
+    torchvision.transforms.RandomRotation(10),
+    torchvision.transforms.ColorJitter(
+        brightness=0.2,contrast=0.2,saturation=0.2),
     torchvision.transforms.RandomCrop(224,padding=4),
     torchvision.transforms.ToTensor(),
     torchvision.transforms.Normalize([0.485,0.456,0.406],
@@ -103,12 +106,16 @@ def buil_model(Architecture,num_classes):
 model=buil_model(Architecture,num_classes)
 model=model.to(DEVICE)
 
-#loss and optimizer
-criterion=torch.nn.CrossEntropyLoss()
-
+#optimizer ,loss and scheduler
 optimizer=torch.optim.Adam(
     filter(lambda p: p.requires_grad,model.parameters()),lr=1e-3
-
+)
+criterion=torch.nn.CrossEntropyLoss()
+scheduler=torch.optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer,
+    mode='max',
+    factor=0.5,
+    patience=2,
 )
 
 
@@ -153,6 +160,8 @@ for epoch in range(Epochs):
 
     if val_acc > best_val_acc:
         best_val_acc = val_acc
+
+    scheduler.step(val_acc)
 
     train_accs.append(train_acc)
     train_losses.append(train_loss)
