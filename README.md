@@ -57,3 +57,18 @@ Feature Extraction
 
 Fine Tunning 
 <img width="1600" height="300" alt="predicted_fine" src="https://github.com/user-attachments/assets/cef2fe8e-993c-43b0-b982-71fb922d7cde" />
+
+
+## How to Run
+```bash
+pip install torch torchvision
+python convolution.py
+```
+
+1. Title
+2. Description
+3. Files table
+4. Results table
+5. Graphs
+6. What I learned
+7. How to run
