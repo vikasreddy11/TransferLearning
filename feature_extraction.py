@@ -4,7 +4,7 @@ import torchvision
 #setting
 Architecture='resnet50'
 Batch=32
-Epoch=5
+Epoch=10
 Num_classes=2
 DEVICE=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 train_accs,train_losses=[],[]
@@ -134,6 +134,9 @@ for epoch in range(Epoch):
     val_acc=(correct/total)*100
     val_loss=running_loss/len(val_loader)
 
+    if val_acc>best_acc:
+        best_acc=val_acc
+
     train_accs.append(train_acc)
     train_losses.append(train_loss)
     val_accs.append(val_acc)
@@ -143,6 +146,7 @@ for epoch in range(Epoch):
     print(f"Trainning accuracy{train_acc:.2f}%")
     print(f"Test accuracy{val_acc:.2f}%")
 
+print(f"Best accuracy:{best_acc:.2f}")
 
 #plotting
 import matplotlib.pyplot as plt
