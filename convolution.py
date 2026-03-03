@@ -15,8 +15,7 @@ train_transforms=torchvision.transforms.Compose([
     torchvision.transforms.RandomHorizontalFlip(),
     torchvision.transforms.RandomRotation(10),
     torchvision.transforms.ColorJitter(
-        brightness=0.2,contrast=0.2,saturation=0.2
-    ),
+        brightness=0.2,contrast=0.2,saturation=0.2),
     torchvision.transforms.RandomCrop(224,padding=4),
     torchvision.transforms.ToTensor(),
     torchvision.transforms.Normalize([0.5,0.5,0.5],   
@@ -44,6 +43,8 @@ class build_CNN(torch.nn.Module):
         self.cnn1=torch.nn.Conv2d(in_channels=3,out_channels=32,kernel_size=3,padding=1)
         self.cnn2=torch.nn.Conv2d(32,64,kernel_size=3,padding=1)
         self.cnn3=torch.nn.Conv2d(64,128,kernel_size=3,padding=1)
+
+        
 
         self.pool=torch.nn.MaxPool2d(2,2)
 
