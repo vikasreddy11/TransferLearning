@@ -110,4 +110,4 @@ python fine_tunning.py
 ## Author
 **Vikas Reddy**
 - GitHub: [@vikasreddy11](https://github.com/vikasreddy11)
-- LinkedIn: [linkedin.com/in/vikas-reddy-veeramreddy-26057138a]
+- LinkedIn: [@linkedin.com/in/vikas-reddy-veeramreddy-26057138a]
