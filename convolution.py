@@ -4,7 +4,7 @@ import torchvision
 #setting
 Batch=32
 DEVICE=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-Epochs=5
+Epochs=10
 train_accs,val_accs=[],[]
 train_losses,val_losses=[],[]
 
@@ -13,6 +13,10 @@ train_losses,val_losses=[],[]
 train_transforms=torchvision.transforms.Compose([
     torchvision.transforms.Resize((224,224)),
     torchvision.transforms.RandomHorizontalFlip(),
+    torchvision.transforms.RandomRotation(10),
+    torchvision.transforms.ColorJitter(
+        brightness=0.2,contrast=0.2,saturation=0.2
+    ),
     torchvision.transforms.RandomCrop(224,padding=4),
     torchvision.transforms.ToTensor(),
     torchvision.transforms.Normalize([0.5,0.5,0.5],   
