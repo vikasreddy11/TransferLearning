@@ -26,8 +26,8 @@ Image classification using CNN and Transfer Learning with PyTorch on cat vs dog
 
 
 ## Training curves
-The graph shows accuracy increasing and loss decreasing over 10 epochs.
-Train and Val curves are close together which means no overfitting.
+-The graph shows accuracy increasing and loss decreasing over 10 epochs.
+-Train and Val curves are close together which means no overfitting.
 
 CNN training graph
 <img width="1200" height="400" alt="conv_train" src="https://github.com/user-attachments/assets/3ac52536-0844-4c32-9309-1afe593ad891" />
@@ -39,9 +39,8 @@ Fine Tunning
 <img width="1200" height="400" alt="Fine_training" src="https://github.com/user-attachments/assets/2c96e738-1cca-4cc0-9235-4494283e888c" />
 
 ## Confusion matrix
-Diagonal shows correct predictions.
-Model performs well on most classes.
-Some confusion between cat and dog which is expected as they look similar.
+-Diagonal shows correct predictions.
+-Some confusion between cat and dog which is expected as they look similar.
 
 CNN confusion matrix
 <img width="1200" height="800" alt="convConfusion" src="https://github.com/user-attachments/assets/3628b8db-56eb-4276-9315-2ff79fa9ec45" />
@@ -53,8 +52,8 @@ Fine Tunning confusion matrix
 <img width="1000" height="800" alt="fineConfusion" src="https://github.com/user-attachments/assets/74148d40-7648-464c-9a14-cdee3e17ceaf" />
 
 ## Predictions
-Green title = correct prediction
-Red title = wrong prediction
+-Green title = correct prediction
+-Red title = wrong prediction
 
 CNN 
 <img width="1600" height="300" alt="cnnpredicted" src="https://github.com/user-attachments/assets/00016de1-15b3-4a25-95e8-f45f22c16459" />
