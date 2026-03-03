@@ -14,7 +14,7 @@ Image classification using CNN and Transfer Learning with PyTorch on cat vs dog
 
 | Model |  AVG Accuracy |
 |-------|----------|
-| CNN from Scratch | xx% |
+| CNN from Scratch | 69.52% |
 | Feature Extraction | xx% |
 | Fine Tuning | xx% |
 
@@ -46,3 +46,14 @@ Feature Extraction confusion matrix
 
 Fine Tunning confusion matrix
 <img width="1000" height="800" alt="fineConfusion" src="https://github.com/user-attachments/assets/74148d40-7648-464c-9a14-cdee3e17ceaf" />
+
+## Predictions
+
+CNN 
+<img width="1600" height="300" alt="cnnpredicted" src="https://github.com/user-attachments/assets/00016de1-15b3-4a25-95e8-f45f22c16459" />
+
+Feature Extraction
+<img width="1600" height="300" alt="predicted_feature" src="https://github.com/user-attachments/assets/1fc28614-bb95-4226-a019-93d544025b49" />
+
+Fine Tunning 
+<img width="1600" height="300" alt="predicted_fine" src="https://github.com/user-attachments/assets/cef2fe8e-993c-43b0-b982-71fb922d7cde" />
