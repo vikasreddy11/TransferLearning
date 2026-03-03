@@ -99,7 +99,6 @@ scheduler=torch.optim.lr_scheduler.ReduceLROnPlateau(
     mode='max',
     factor=0.5,
     patience=2,
-    verbose=True
 )
 
 
