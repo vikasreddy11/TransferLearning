@@ -91,11 +91,17 @@ model=buid_model(Architecture,Num_classes)
 model=model.to(DEVICE)
 
 
-#optimizer and loss
+#optimizer ,loss and scheduler
 optimizer=torch.optim.Adam(
     filter(lambda p: p.requires_grad,model.parameters()),lr=1e-3
 )
 criterion=torch.nn.CrossEntropyLoss()
+scheduler=torch.optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer,
+    mode='max',
+    factor=0.5,
+    patience=2,
+)
 
 #train
 best_acc=0
@@ -136,6 +142,8 @@ for epoch in range(Epoch):
 
     val_acc=(correct/total)*100
     val_loss=running_loss/len(val_loader)
+
+    scheduler.step(val_acc)
 
     if val_acc>best_acc:
         best_acc=val_acc
