@@ -44,8 +44,6 @@ class build_CNN(torch.nn.Module):
         self.cnn2=torch.nn.Conv2d(32,64,kernel_size=3,padding=1)
         self.cnn3=torch.nn.Conv2d(64,128,kernel_size=3,padding=1)
 
-        
-
         self.pool=torch.nn.MaxPool2d(2,2)
 
         self.fn1=torch.nn.Linear(128*28*28,512)
@@ -60,6 +58,7 @@ class build_CNN(torch.nn.Module):
         x=self.cnn1(x)
         x=self.relu(x)
         x=self.pool(x)
+        
 
         x=self.cnn2(x)
         x=self.relu(x)

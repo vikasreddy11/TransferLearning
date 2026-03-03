@@ -2,7 +2,7 @@ import torch
 import torchvision
 
 #setting
-Epochs=5
+Epochs=10
 Batch=32
 Architecture='resnet50'
 num_classes=2
