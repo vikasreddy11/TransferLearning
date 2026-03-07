@@ -93,6 +93,7 @@ model=model.to(DEVICE)
 
 #optimizer ,loss and scheduler
 criterion=torch.nn.CrossEntropyLoss()
+
 optimizer=torch.optim.Adam(model.parameters(),lr=1e-3)
 scheduler=torch.optim.lr_scheduler.ReduceLROnPlateau(
     optimizer,
