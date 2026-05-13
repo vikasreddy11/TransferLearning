@@ -2,9 +2,6 @@
 
 Image classification using CNN and Transfer Learning with PyTorch on cat vs dog
 
-![Python](https://img.shields.io/badge/Python-3.13-blue)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.0-red)
-![GPU](https://img.shields.io/badge/GPU-RTX3050-green)
 
 ## Files
 | File | Description |
